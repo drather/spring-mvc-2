@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -108,4 +110,31 @@ public class RequestParamController {
         return "ok";
     }
 
+    /**
+     * 기존의 @RequestParam 애너테이션을 활용해 값을 꺼내서, 객체에 set 하는 부분을, @ModelAttribute 를 이용해 자동화해주는 메서드
+     * @param helloData
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        return "ok";
+    }
+
+    /**
+     * ModelAttribute 애너테이션을 생략할 수도 있음
+     * 그러나, 이러한 생략은 혼란을 야기시킴
+     * 스프링은 해당 생략 시, 다음과 같은 규칙을 적용
+     * String, Integer 등 단순 타입은 @RequestParam
+     * 나머지 객체(사용자 생성 객체 등)은 @ModelAttribute
+     * @param helloData
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        return "ok";
+    }
 }
